@@ -6,7 +6,7 @@ import { Input } from '../Input/Input.jsx';
 import cn from 'classnames';
 import { UserContext } from '../../context/UserContext.jsx';
 
-export const JournalForm = ({ onSubmit, data }) => {
+export const JournalForm = ({ onSubmit, data, onDelete }) => {
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE);
   const { isValid, values, isFormReadyToSubmit } = formState;
   const titleRef = useRef();
@@ -29,14 +29,10 @@ export const JournalForm = ({ onSubmit, data }) => {
   };
 
   useEffect(() => {
-    if (isFormReadyToSubmit) {
-      onSubmit(values);
+    if (!data) {
       dispatchForm({ type: 'CLEAR' });
       dispatchForm({ type: 'SET_VALUE', payload: { userId } });
     }
-  }, [isFormReadyToSubmit, values, onSubmit, userId]);
-
-  useEffect(() => {
     dispatchForm({ type: 'SET_VALUE', payload: { ...data } });
   }, [data]);
 
@@ -55,6 +51,14 @@ export const JournalForm = ({ onSubmit, data }) => {
   }, [isValid]);
 
   useEffect(() => {
+    if (isFormReadyToSubmit) {
+      onSubmit(values);
+      dispatchForm({ type: 'CLEAR' });
+      dispatchForm({ type: 'SET_VALUE', payload: { userId } });
+    }
+  }, [isFormReadyToSubmit, values, onSubmit, userId]);
+
+  useEffect(() => {
     dispatchForm({ type: 'SET_VALUE', payload: { userId } });
   }, [userId]);
 
@@ -65,6 +69,12 @@ export const JournalForm = ({ onSubmit, data }) => {
   const addNote = (event) => {
     event.preventDefault();
     dispatchForm({ type: 'SUBMIT' });
+  };
+
+  const deleteNote = () => {
+    onDelete(data.id);
+    dispatchForm({ type: 'CLEAR' });
+    dispatchForm({ type: 'SET_VALUE', payload: { userId } });
   };
 
   return (
@@ -79,6 +89,9 @@ export const JournalForm = ({ onSubmit, data }) => {
           name={'title'}
           isValid={!isValid.title}
         />
+        {data?.id && <button className={styles['delete']} type={'button'} onClick={() => deleteNote()}>
+          <img src={'/archive.svg'} alt={'icon delete'} />
+        </button>}
       </div>
 
       <div className={styles['form-row']}>
