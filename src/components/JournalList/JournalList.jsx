@@ -2,7 +2,8 @@ import './JournalList.css';
 import { CardButton } from '../CardButton/CardButton.jsx';
 import { JournalItem } from '../JournalItem/JournalItem.jsx';
 import { UserContext } from '../../context/UserContext.jsx';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
+import { sortItems } from '../../utils/sorting.js';
 
 export const JournalList = ({ items }) => {
   const { userId } = useContext(UserContext);
@@ -11,19 +12,13 @@ export const JournalList = ({ items }) => {
     return <p>No recording</p>;
   }
 
-  const sortItems = (a, b) => {
-    if (a.date < b.date) {
-      return 1;
-    } else {
-      return -1;
-    }
-  };
+  const filteredItems = useMemo(() =>
+    items.filter((el) => el.userId === userId)
+      .sort(sortItems), [items, userId]);
 
   return (
     <>
-      {items
-        .filter((el) => el.userId === userId)
-        .sort(sortItems)
+      {filteredItems
         .map((el) => (
           <CardButton key={el.id}>
             <JournalItem data={el} />

@@ -1,4 +1,4 @@
-import styles from './Logo.module.scss';
+import styles from './Logo.module.css';
 
 export const Logo = ({ image }) => {
   return (
