@@ -8,6 +8,7 @@
     font-family: 'Source Sans 3', sans-serif;
     border-bottom: 1px solid #323232;
     width: 100%;
+    color: #FFF;
 }
 
 .input {
@@ -20,6 +21,11 @@
     font-family: 'Source Sans 3', sans-serif;
     border-bottom: 1px solid #323232;
     width: 100%;
+    color: #FFF;
+}
+
+textarea {
+    color: #FFF;
 }
 
 .invalid {

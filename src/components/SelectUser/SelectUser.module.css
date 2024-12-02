@@ -1,5 +1,6 @@
 .select {
     padding: 10px;
-    background: none;
+    background: #323232;
     border: 1px solid #323232;
+    color: #FFF;
 }
