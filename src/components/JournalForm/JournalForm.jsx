@@ -29,6 +29,14 @@ export const JournalForm = ({ onSubmit }) => {
   };
 
   useEffect(() => {
+    if (isFormReadyToSubmit) {
+      onSubmit(values);
+      dispatchForm({ type: 'CLEAR' });
+      dispatchForm({ type: 'SET_VALUE', payload: { userId } });
+    }
+  }, [isFormReadyToSubmit, values, onSubmit, userId]);
+
+  useEffect(() => {
     let timerId;
     if (!isValid.post || !isValid.title || !isValid.date) {
       focusError(isValid);
@@ -43,16 +51,11 @@ export const JournalForm = ({ onSubmit }) => {
   }, [isValid]);
 
   useEffect(() => {
-    if (isFormReadyToSubmit) {
-      onSubmit(values);
-      dispatchForm({ type: 'CLEAR' });
-    }
-  }, [isFormReadyToSubmit, values, onSubmit]);
+    dispatchForm({ type: 'SET_VALUE', payload: { userId } });
+  }, [userId]);
 
   const onChange = (event) => {
-    const { name, value } = event.target;
     dispatchForm({ type: 'SET_VALUE', payload: { [event.target.name]: event.target.value } });
-    dispatchForm({ type: 'CONTROL_SET_INPUT', payload: { [name]: value, userId: userId } });
   };
 
   const addNote = (event) => {
